@@ -1,34 +1,38 @@
-# Stage 1: SonarQube scan
-FROM maven:3.8.4-jdk-8 AS sonarqube
+# Step 1: Run SonarQube to check the code (SonarQube scanner)
+FROM sonarsource/sonar-scanner-cli AS sonarqube
 
-# Install SonarQube Scanner
-RUN mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
-
-# Copy the source code into the container
 WORKDIR /app
+
+# Copy the project files to the image
 COPY . .
 
-# Run SonarQube scan
-RUN mvn sonar:sonar
+# Run SonarQube analysis 
+RUN sonar-scanner -Dsonar.projectKey=sonarqubeProject \
+    -Dsonar.sources=. \
+    -Dsonar.host.url=http://localhost:9000 \
+    -Dsonar.login=[![Quality Gate Status](http://localhost:9000/api/project_badges/measure?project=sonarqubeProject&metric=alert_status&token=sqb_b8244d7d892ca32462c6ab891507dc379f63f924)](http://localhost:9000/dashboard?id=sonarqubeProject)
 
-# Stage 2: Build the Maven project and create the artifact
-FROM maven:3.8.4-jdk-8 AS build
+# Step 2: Build the project with Maven
+FROM maven:3.8.7-openjdk-18 AS builder
 
-# Copy the source code into the container
 WORKDIR /app
+
+# Copy all project files
 COPY . .
+
+# Make the mvnw file executable
+RUN chmod +x mvnw  
 
 # Run the Maven build to package the artifact
-RUN ./mvnw package
+RUN ./mvnw package 
 
-# Stage 3: Create final image with Java 8 and run the JAR
-FROM openjdk:8-jre-alpine AS runtime
+# Step 3: Create the final image with Java 8
+FROM openjdk:8-jre AS runtime
 
-# Create a directory for the JAR file
 WORKDIR /code
 
-# Copy the JAR file from the build stage
-COPY --from=build /app/target/*.jar /code/
+# Copy the JAR file from the Maven build step
+COPY --from=builder /app/target/*.jar app.jar
 
-# Set the CMD to run the JAR file
-CMD ["sh", "-c", "java -jar /code/*.jar"]
+# Set the default command to run the JAR
+CMD ["java", "-jar", "app.jar"]
