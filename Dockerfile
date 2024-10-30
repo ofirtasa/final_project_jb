@@ -26,7 +26,7 @@ RUN chmod +x mvnw
 # Run the Maven build to package the artifact
 RUN ./mvnw package 
 
-# Step 3: Create the final image with Java 8
+# Step 3: Create the final image with Java 21
 FROM openjdk:21-jre AS runtime
 
 WORKDIR /code
