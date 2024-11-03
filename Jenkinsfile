@@ -21,6 +21,7 @@ pipeline {
                     def latestTag = "${IMAGE_NAME}:latest"
                     def buildTag = "${IMAGE_NAME}:${buildNumber}"
 
+                    sh "docker --version"
                     // Run Docker build using the Dockerfile in the cloned repo
                     sh "docker build -t ${latestTag} -t ${buildTag} ."
                 }
