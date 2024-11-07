@@ -23,6 +23,9 @@ COPY . .
 # Make the mvnw file executable
 RUN chmod +x ./mvnw  
 
+# Step to fix line endings in mvnw
+RUN sed -i 's/\r//' mvnw
+
 # Run the Maven build to package the artifact
 RUN ./mvnw package
 
