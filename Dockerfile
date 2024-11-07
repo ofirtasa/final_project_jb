@@ -21,7 +21,7 @@ WORKDIR /app
 COPY . .
 
 # Make the mvnw file executable
-RUN chmod +x mvnw  
+RUN chmod +x ./mvnw  
 
 # Run the Maven build to package the artifact
 RUN ./mvnw package 
