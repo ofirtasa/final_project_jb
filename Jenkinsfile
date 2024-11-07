@@ -33,9 +33,9 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_cred' , usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         powershell """
-                            echo \$env:PASSWORD | docker login -u \$env:USERNAME --password-stdin
-                            docker push \$env:IMAGE_NAME:latest
-                            docker push \$env:IMAGE_NAME:\$env:BUILD_NUMBER
+                            docker login -u $env:USERNAME -p $env:PASSWORD
+                            docker push ${env.IMAGE_NAME}:latest
+                            docker push ${env.IMAGE_NAME}:${env.BUILD_NUMBER}
                         """
                     }
                 }
