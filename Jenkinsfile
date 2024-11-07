@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials' // Jenkins credentials ID
+        DOCKER_CREDENTIALS_ID = 'dockerhub-cred' // Jenkins credentials ID
         DOCKERHUB_USER = 'ofir2608'
         IMAGE_NAME = 'ofir2608/final_project_jb'
     }
@@ -31,7 +31,7 @@ pipeline {
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials' , usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-cred' , usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh """
                         echo "${PASSWORD}" | docker login -u "${USERNAME}" --password-stdin
                         docker push ${IMAGE_NAME}:latest
