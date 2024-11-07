@@ -32,11 +32,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_cred' , usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh """
+                        sh '''
                         echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-                        docker push ${IMAGE_NAME}:latest
-                        docker push ${IMAGE_NAME}:${BUILD_NUMBER}
-                        """
+                        docker push $IMAGE_NAME:latest
+                        docker push $IMAGE_NAME:$BUILD_NUMBER
+                        '''
                     }
                 }
             }
