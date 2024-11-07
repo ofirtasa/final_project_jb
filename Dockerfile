@@ -24,9 +24,8 @@ COPY . .
 RUN chmod +x ./mvnw  
 
 # Run the Maven build to package the artifact
-RUN apt-get update && apt-get install -y maven
-RUN mvn clean install
-# RUN ./mvnw package 
+RUN ls -l ~
+RUN ./mvnw package 
 
 # Step 3: Create the final image with Java 8
 FROM openjdk:8-jre AS runtime
