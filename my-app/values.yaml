@@ -144,7 +144,7 @@ mysql:
     app: mysql
   labelSelector: 
     app: mysql
-  name: mysql-deployment
+  name: deployment
   env:
     MYSQL_ROOT_PASSWORD: root
     MYSQL_ALLOW_EMPTY_PASSWORD: "true"
